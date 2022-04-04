@@ -1,11 +1,9 @@
 import numpy as np
-import math
-import copy
 import scipy.constants
 
 class particle:
     """
-    Class to model a massive particle in a gravitational field. 
+    Class to model a particle in the scattering experiment. 
     It will make use of numpy arrays to store the position velocity etc. 
     Working directly from past exercises... 
 
@@ -13,8 +11,6 @@ class particle:
     position and velocity in m 
     """
 
-    #G=6.67408E-11
-    G=scipy.constants.G
     #e=1.60217662E-19 
     e=scipy.constants.elementary_charge
     #epsilon=8.854187E-12

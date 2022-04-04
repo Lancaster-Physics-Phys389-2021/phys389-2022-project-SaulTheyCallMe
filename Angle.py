@@ -1,26 +1,40 @@
 import math
-import NearestPoint
-import numpy as np
+import scipy.constants
+import random
 
 class AngleCalculation:
+    """
+    Class to calculate the scattering angles using Rutherford model.
+    It will make use random function to generate the impact parameter and apply to
+    calculate the scattering angle at a known energy.
+    
+    distances are in m.
+    Angles are in degrees.
+    """
+    
+    #e=1.60217662E-19 
+    e=scipy.constants.elementary_charge
+    #epsilon=8.854187E-12
+    epsilon=scipy.constants.epsilon_0
 
-    NearLattice = NearestPoint.NearPoint
-
-    def __init__(self, LatticeParticles, LatticeHead, BeamParticles, BeamHead):
+    def __init__(self,LatticeParticles, ZnumberLat=79, ZnumberBe=2, Energy = 1.6):
         self.lattice = LatticeParticles
-        self.beam = BeamParticles
-        self.LaH = LatticeHead
-        self.BeH = BeamHead
+        self.ZL = ZnumberLat
+        self.ZB = ZnumberBe
+        self.Ener = Energy
     
     def AngleArray(self): 
         AngleArray = []
-        ClosestPoint = self.NearLattice.ckdnearest(self.BeH, self.LaH)
-        for x in range(0,len(self.beam)):
-            p = int(ClosestPoint.iloc[x].id)
-            B=(((self.beam[x].position[1]-self.lattice[p].position[1])**2+(self.beam[x].position[2]-self.lattice[p].position[2])**2)**(1/2))
-            D=self.lattice[p].znumber*self.beam[x].znumber*self.beam[x].e**2/(4*self.beam[x].epsilon*math.pi*self.beam[x].energy*1.602e-13)
-            TanValue = D/(2*B)
-            Angle =2*180*math.atan(TanValue)/math.pi
-            AngleArray.append(Angle)
-        return AngleArray
+        # Calculating the maximum approach
+        D=(self.ZL*self.ZB*197.3)/(137*self.Ener)*1e-15
+        for x in range(0,700000):
+            #Generating a random impact parameter.   
+            B = random.randint(0,100000)*D*1e-5
+            #Calculating scattering angle and saving it in an array.
+            if B == 0:
+                Angle = 180
+            else:
+                Angle = 360*math.atan(D/(2*B))/math.pi
+                AngleArray.append(Angle)
+        return  AngleArray
 
